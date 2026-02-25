@@ -61,7 +61,7 @@ export const loginCompany = async (req, res) => {
       return res.json({ success: false, message: "Invalid email or password" });
     }
     if (await bcrypt.compare(password, company.password)) {
-      res.status.json({
+      res.json({
         success: true,
         message: "Company logged in successfully",
         company: {
