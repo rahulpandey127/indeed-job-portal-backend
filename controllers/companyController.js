@@ -54,9 +54,8 @@ export const registerCompany = async (req, res) => {
 //Comapy Login
 export const loginCompany = async (req, res) => {
   //company login
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
     const company = await Company.findOne({ email });
     if (!company) {
       return res.json({ success: false, message: "Invalid email or password" });
@@ -78,7 +77,7 @@ export const loginCompany = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: "recriter error" });
+    res.json({ success: false, message: error.message });
   }
 };
 
