@@ -74,7 +74,7 @@ export const loginCompany = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status.json({ success: false, message: error.message });
+    res.status.json({ success: false, message: "recriter error" });
   }
 };
 
