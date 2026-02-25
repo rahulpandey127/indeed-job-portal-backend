@@ -11,18 +11,17 @@ export const registerCompany = async (req, res) => {
   const imageFile = req.file;
 
   if (!name || !email || !password || !imageFile) {
-    return res
-      .status(400)
-      .json({ success: false, message: "All fields are required" });
+    return res.json({ success: false, message: "All fields are required" });
   }
 
   try {
     // Check if the company already exists
     const companyExist = await Company.findOne({ email });
     if (companyExist) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Company already registered" });
+      return res.json({
+        success: false,
+        message: "Company already registered",
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -34,7 +33,7 @@ export const registerCompany = async (req, res) => {
       password: hashedPassword,
       image: imageUpload.secure_url,
     });
-    res.status(201).json({
+    res.json({
       success: true,
       message: "Company registered successfully",
       company: {
@@ -47,7 +46,7 @@ export const registerCompany = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
