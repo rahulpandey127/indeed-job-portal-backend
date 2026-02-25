@@ -111,12 +111,12 @@ export const updateUserResume = async (req, res) => {
       userData.resume = resumeUpload.secure_url;
     }
     await userData.save();
-    return res.status(200).json({
+    return res.json({
       success: true,
       message: "Resume Updated Successfully",
       resume: userData.resume,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
