@@ -93,10 +93,13 @@ export const getCompanyData = async (req, res) => {
 
 //Post a new job
 export const postJob = async (req, res) => {
-  const { title, description, location, salary, level, category } = req.body;
   //company id comes from auth middleware
   const companyId = req.company._id;
+  const { title, description, location, salary, level, category } = req.body;
   try {
+    if (!title || !description || !location || !salary || !level || !category) {
+      return res.json({ success: false, message: "All fields are required" });
+    }
     const newJob = new Job({
       title,
       description,
@@ -108,18 +111,20 @@ export const postJob = async (req, res) => {
       companyId,
     });
     await newJob.save();
-    res
-      .status(201)
-      .json({ success: true, message: "Job posted successfully", job: newJob });
+    res.json({
+      success: true,
+      message: "Job posted successfully",
+      job: newJob,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
-  res.json({
-    success: true,
-    message: "Job posted successfully",
-    job: { title, description, location, salary, companyId },
-  });
+  // res.json({
+  //   success: true,
+  //   message: "Job posted successfully",
+  //   job: { title, description, location, salary, companyId },
+  // });
 };
 
 //Get Comapny Job Applicants
