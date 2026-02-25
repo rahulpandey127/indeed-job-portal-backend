@@ -8,14 +8,12 @@ export const getUserData = async (req, res) => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ success: true, user });
+    res.json({ success: true, user });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -24,14 +22,12 @@ export const getAllUsersList = async (req, res) => {
   try {
     const allUsers = await User.find({});
     if (!allUsers) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.json({ success: false, message: "User not found" });
     }
-    res.status(200).json({ success: true, allUsers });
+    res.json({ success: true, allUsers });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 //Apply for a job
@@ -88,13 +84,11 @@ export const getUserJobApplications = async (req, res) => {
       .exec();
 
     if (!application) {
-      return res
-        .status(404)
-        .json({ success: false, message: "No Job Applications Found" });
+      return res.json({ success: false, message: "No Job Applications Found" });
     }
-    return res.status(200).json({ success: true, application });
+    return res.json({ success: true, application });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -103,7 +97,7 @@ export const getUserJobApplications = async (req, res) => {
 export const updateUserResume = async (req, res) => {
   try {
     const userId = req.auth.userId;
-    const resumeFile = req.files;
+    let resumeFile = req.files;
     const userData = await User.findById(userId);
 
     if (resumeFile) {

@@ -158,13 +158,13 @@ export const getCompanyPostedJobs = async (req, res) => {
         return { ...job.toObject(), applicants: applicants.length };
       }),
     );
-    res.status(200).json({
+    res.json({
       success: true,
       jobsData: [...jobsData],
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -174,16 +174,19 @@ export const changeJobApplicationStatus = async (req, res) => {
     const { id, status } = req.body;
     console.log(id, status);
     const application = await jobApplication.findById(id);
+    if (!application) {
+      return res.json({ success: false, message: "Job application not found" });
+    }
     application.status = status;
     await application.save();
-    res.status(200).json({
+    res.json({
       success: true,
       message: "Job application status changed successfully",
       application,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -193,17 +196,21 @@ export const changeJobVisibility = async (req, res) => {
     const { id } = req.body;
     const companyId = req.company._id;
     const job = await Job.findById(id);
+    if (!job) {
+      return res.json({ success: false, message: "Job not found" });
+    }
+
     if (companyId.toString() == job.companyId.toString()) {
       job.visible = !job.visible;
     }
     await job.save();
-    res.status(200).json({
+    res.json({
       success: true,
       message: "Job visibility changed successfully",
       job,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
