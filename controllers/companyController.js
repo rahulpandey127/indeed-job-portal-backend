@@ -53,28 +53,32 @@ export const registerCompany = async (req, res) => {
 
 //Comapy Login
 export const loginCompany = async (req, res) => {
+  //company login
   const { email, password } = req.body;
 
   try {
-    const comapany = await Company.findOne({ email });
-    if (await bcrypt.compare(password, comapany.password)) {
+    const company = await Company.findOne({ email });
+    if (!company) {
+      return res.json({ success: false, message: "Invalid email or password" });
+    }
+    if (await bcrypt.compare(password, company.password)) {
       res.status.json({
         success: true,
         message: "Company logged in successfully",
         company: {
-          _id: comapany._id,
-          name: comapany.name,
-          email: comapany.email,
-          image: comapany.image,
+          _id: company._id,
+          name: company.name,
+          email: company.email,
+          image: company.image,
         },
-        token: generateToken(comapany._id),
+        token: generateToken(company._id),
       });
     } else {
       res.json({ success: false, message: "Invalid email or password" });
     }
   } catch (error) {
     console.log(error);
-    res.status.json({ success: false, message: "recriter error" });
+    res.json({ success: false, message: "recriter error" });
   }
 };
 
